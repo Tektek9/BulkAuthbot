@@ -46,10 +46,10 @@ def Tektektek():
             print("Target: ",naaa)
             print("IP    : ",nakniknuk)
                 
-            lapo = driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/form/input[1]')
+            lapo = driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/form/input[1]')#titik injek1
             lapo.send_keys(cred1)
             
-            lapo = driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/form/input[2]')
+            lapo = driver.find_element(By.XPATH,'/html/body/table/tbody/tr[2]/td/table/tbody/tr/td/form/input[2]')#titik injek2
             lapo.send_keys(cred2)
             maeng = driver.current_url
             lapo = driver.find_element(By.XPATH,'//*[@id="login_word"]')
@@ -70,37 +70,39 @@ def Tektektek():
                 
     seleniumLogger.setLevel(logging.ERROR)
     urlliblogger.setLevel(logging.ERROR)
-
-    if str(sys.argv[1]) == "16":
-            i=0
-            c=0
-            ipSupermicro = pd.read_csv('ipSupermicro1.csv')
-            ipS = ipSupermicro.shape[0]
-            for tektek in range(ipS):
-                i +=1
-                alamat = ipSupermicro.iloc[i]['target']
-                if pd.notnull(alamat):
-                    tektek = alamat.split(',')
-                    for url in tektek:
-                        url = url.strip()
-                        url = "10.10.20.21"
-                        url2 = "http://" + url
-                        url3 = url + ":80"
-                        nakniknuk = url
-                        c+=1
-                        try:
-                            sc = requests.get(url2)
+    if len(sys.argv) < 2:
+        print("Penggunaan: bulkauthtester.py run")
+    elif str(sys.argv[1]) == "run":
+        i=0
+        c=0
+        ipSupermicro = pd.read_csv('ipSupermicro1.csv')#Siapkan list ip yang ingin dites formnya
+        ipS = ipSupermicro.shape[0]
+        for tektek in range(ipS):
+            i +=1
+            alamat = ipSupermicro.iloc[i]['target']
+            if pd.notnull(alamat):
+                tektek = alamat.split(',')
+                for url in tektek:
+                    url = url.strip()
+                    url2 = "http://" + url
+                    url3 = url + ":80"
+                    nakniknuk = url
+                    c+=1
+                    try:
+                        sc = requests.get(url2)
+                        if sc.status_code == 200 :
+                            enum = url2
+                            authSm(c)
+                        else:
+                            cek2 = url3
+                            sc = requests.get(cek2)
                             if sc.status_code == 200 :
-                                enum = url2
+                                enum = url3
                                 authSm(c)
-                            else:
-                                cek2 = url3
-                                sc = requests.get(cek2)
-                                if sc.status_code == 200 :
-                                    enum = url3
-                                    authSm(c)
-                        except requests.exceptions.ConnectionError:
-                            print(f"\n{nakniknuk}")
-                            print(colored("IP tidak bisa di kunjungi bosqiuu :V\n","red"))
-                        continue
+                    except requests.exceptions.ConnectionError:
+                        print(f"\n{nakniknuk}")
+                        print(colored("IP tidak bisa di kunjungi bosqiuu :V\n","red"))
+                    continue
+    else:
+        print("Inputan tidak jelas, program auto close")
 Tektektek()

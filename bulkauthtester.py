@@ -83,7 +83,6 @@ def Tektektek():
                     tektek = alamat.split(',')
                     for url in tektek:
                         url = url.strip()
-                        url = "10.10.20.21"
                         url2 = "http://" + url
                         url3 = url + ":80"
                         nakniknuk = url
